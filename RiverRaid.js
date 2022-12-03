@@ -5,8 +5,8 @@ function newElement(tagName, className, idName) {
     return element
 }
 
-const regionJeu = document.querySelector('[RiverRaid]')
-const statistiquePresenter = document.querySelector('[wm-Statistique]')
+const regionJeu = document.querySelector('[RiverRaid]')  /* marcar area do jogo */
+const statistiquePresenter = document.querySelector('[wm-Statistique]') /* marcar area das estatisticas */
 const statistique = new Statistique()
 let playing = false
 
