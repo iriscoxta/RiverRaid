@@ -5,9 +5,9 @@ function newElement(tagName, className, idName) {
     return element
 }
 
-const gameArea = document.querySelector('[wm-RiverRaid]')
-const statsArea = document.querySelector('[wm-Stats]')
-const stats = new Stats()
+const regionJeu = document.querySelector('[RiverRaid]')
+const statistiquePresenter = document.querySelector('[wm-Statistique]')
+const statistique = new Statistique()
 let playing = false
 
 function Barries() {
@@ -187,10 +187,10 @@ function DrawBarries(barrie) { // recebe a matriz da barreira específica (cená
 
             } else if (tile === 2) {
                 let elementTile = newElement("div", "bonus")
-                let imgBonus = newElement('img', 'imgBonus')
-                imgBonus.src = 'img/bonus.png'
+                let imgDecerner = newElement('img', 'imgDecerner')
+                imgDecerner.src = 'img/bonus.png'
                 // elementTile.style.backgroundColor = "deepskyblue"
-                elementTile.appendChild(imgBonus)
+                elementTile.appendChild(imgDecerner)
                 this.gameContext.appendChild(elementTile)
 
             } else if (tile === 3) {
@@ -208,12 +208,12 @@ function DrawBarries(barrie) { // recebe a matriz da barreira específica (cená
     }
 
 
-    gameArea.insertAdjacentElement('afterbegin', this.gameContext);
+    regionJeu.insertAdjacentElement('afterbegin', this.gameContext);
 
     this.getY = () => parseInt(this.gameContext.style.top.split('px')[0]);
     this.setY = (y) => this.gameContext.style.top = `${y}px`;
 
-    this.animate = () => {
+    this.mouvement = () => {
 
         const motion = 5 //acrescimo de pixels por movimento
         let newYposition = this.getY();
@@ -254,43 +254,43 @@ function SortBarries(barries) { // recebe o objeto que contem todas as barreiras
     return arrBarries[i] // retorna uma barreira aleatória
 }
 
-function Cenary() {
+function Decor() {
     
-    this.newCenary = () => {
+    this.nouveauDecor = () => {
         const barries = new Barries()
         return new DrawBarries(SortBarries(barries))
     }
 
-    let newCenary = this.newCenary()
-    let oldCenary
+    let nouveauDecor = this.nouveauDecor()
+    let agedeDecor
 
 
-    this.animate = () => {
-        newCenary.animate()
+    this.mouvement = () => {
+        nouveauDecor.mouvement()
 
-        if (typeof oldCenary === 'object' && oldCenary !== null) {
-            oldCenary.animate()
-            if (oldCenary.getY() > 680){
-                stats.updatePoints()
-                oldCenary.delete()
+        if (typeof agedeDecor === 'object' && agedeDecor !== null) {
+            agedeDecor.mouvement()
+            if (agedeDecor.getY() > 680){
+                statistique.updatePoints()
+                agedeDecor.delete()
             } 
         }
 
-        if (newCenary.getY() == 0) {
-            oldCenary = newCenary
-            newCenary = this.newCenary()
+        if (nouveauDecor.getY() == 0) {
+            agedeDecor = nouveauDecor
+            nouveauDecor = this.nouveauDecor()
         }
 
     }
 
 }
 
-function Ship() {
+function Personnage() {
 
-    this.goingRight = false
-    this.goingLeft = false
+    this.allerDroite = false
+    this.allerGauche = false
 
-    this.element = newElement('img', 'ship', 'myShip')
+    this.element = newElement('img', 'personnage', 'moi')
     this.element.src = 'img/fadinha.png'
     this.element.style.right = "500%"
 
@@ -300,11 +300,11 @@ function Ship() {
     document.addEventListener("keydown", (event) => {
         switch (event.key) {
             case "ArrowLeft":
-                this.goingLeft = true
+                this.allerGauche = true
                 break
 
             case "ArrowRight":
-                this.goingRight = true
+                this.allerDroite = true
                 break
         }
     });
@@ -312,36 +312,36 @@ function Ship() {
     document.addEventListener("keyup", (event) => {
         switch (event.key) {
             case "ArrowLeft":
-                this.goingLeft = false
+                this.allerGauche = false
                 break
 
             case "ArrowRight":
-                this.goingRight = false
+                this.allerDroite = false
                 break
         }
     });
 
 
-    this.animate = () => {
+    this.mouvement = () => {
 
-        const motion = 15 //acrescimo de pixels por movimento
-        let newXposition = this.getX()
+        const motion = 10 //acrescimo de pixels por movimento
+        let nouveauPositionX = this.getX()
 
-        if (this.goingRight) {
-            newXposition = this.getX() - motion;
-        } else if (this.goingLeft) {
-            newXposition = this.getX() + motion;
+        if (this.allerDroite) {
+            nouveauPositionX = this.getX() - motion;
+        } else if (this.allerGauche) {
+            nouveauPositionX = this.getX() + motion;
         }
-        this.setX(newXposition)
+        this.setX(nouveauPositionX)
     }
 
 }
 
-function Collid() {
+function Collision() {
 
-    this.isColliding = () => {
+    this.cestCollision = () => {
 
-        let shipElement = document.getElementById("myShip")
+        let shipElement = document.getElementById("moi")
         let barriesLenght = document.getElementsByClassName("barrie").length
 
         for (let i = 0; i < barriesLenght; i++) {
@@ -358,17 +358,17 @@ function Collid() {
 
     }
 
-    this.isGetElementFuel = () => {
+    this.prendsLeCarburant = () => {
 
-        let shipElement = document.getElementById("myShip")
+        let shipElement = document.getElementById("moi")
         let fuelsLenght = document.getElementsByClassName("fuel").length
 
         for (let i = 0; i < fuelsLenght; i++) {
             let fuelElement = document.getElementsByClassName("fuel")[i]
             const a = shipElement.getBoundingClientRect()
             const b = fuelElement.getBoundingClientRect()
-            const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left
-            const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top
+            const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left /* calculo da colisão */
+            const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top     /* calculo da colisão */
 
             if (horizontal && vertical){
                 fuelElement.removeChild(fuelElement.firstChild)
@@ -379,9 +379,9 @@ function Collid() {
 
     }
 
-    this.isGetElementBonus = () => {
+    this.prendsDecerner = () => {
 
-        let shipElement = document.getElementById("myShip")
+        let shipElement = document.getElementById("moi")
         let bonusLenght = document.getElementsByClassName("bonus").length
 
         for (let i = 0; i < bonusLenght; i++) {
@@ -400,10 +400,10 @@ function Collid() {
 
     }
 
-    this.verifyCollid = () => {
+    this.chequesCollision = () => {
 
-        if (this.isColliding()){
-            stats.gameOver()
+        if (this.cestCollision()){
+            statistique.gameOver()
         }
             
 
@@ -411,8 +411,8 @@ function Collid() {
 
     this.verifyGetElementFuel = () => {
 
-        if (this.isGetElementFuel()){
-            stats.addLevelFuel()
+        if (this.prendsLeCarburant()){
+            statistique.addLevelFuel()
         }
             
 
@@ -420,15 +420,15 @@ function Collid() {
 
     this.verifyGetElementBonus = () => {
 
-        if (this.isGetElementBonus()){
-            stats.addPoints()
+        if (this.prendsDecerner()){
+            statistique.addPoints()
         }
 
     }
 
 }
 
-function Stats() {
+function Statistique() {
     
     let playerPoints = 0
     
@@ -438,11 +438,11 @@ function Stats() {
 
     // -------------- Pontuação ---------------
     this.points = newElement("div", "points")
-    this.points.appendChild(document.createTextNode(`Pontuação: ${playerPoints}`))
+    this.points.appendChild(document.createTextNode(`Ponctuation: ${playerPoints}`))
 
     // -------------- Botão ---------------
     this.btPlay = newElement("button", "btPlay")
-    this.btPlay.appendChild(document.createTextNode("JOGAR"))
+    this.btPlay.appendChild(document.createTextNode("JOUER"))
     this.btPlay.onclick = () => {
         playing = true
         document.querySelector('.btPlay').style.display = 'none'
@@ -450,20 +450,20 @@ function Stats() {
 
     // -------------- Barra de Combustível ----------------
     this.titleFuel = newElement("div", "titleFuel")
-    this.titleFuel.appendChild(document.createTextNode(`Combustível`))
+    this.titleFuel.appendChild(document.createTextNode(`Le Carburant`))
     this.progressBarFuel = newElement("div", "progressBarFuel")
     
 
     // ---------------------Config da Página---------------
-    statsArea.style.display = 'flex'
-    statsArea.style.flexDirection = 'column'
-    statsArea.style.justifyContent = 'flex-start'
-    statsArea.style.alignItems = 'center'
-    statsArea.appendChild(this.title)
-    statsArea.appendChild(this.points)
-    statsArea.appendChild(this.titleFuel)
-    statsArea.appendChild(this.progressBarFuel)
-    statsArea.appendChild(this.btPlay)
+    statistiquePresenter.style.display = 'flex'
+    statistiquePresenter.style.flexDirection = 'column'
+    statistiquePresenter.style.justifyContent = 'flex-start'
+    statistiquePresenter.style.alignItems = 'center'
+    statistiquePresenter.appendChild(this.title)
+    statistiquePresenter.appendChild(this.points)
+    statistiquePresenter.appendChild(this.titleFuel)
+    statistiquePresenter.appendChild(this.progressBarFuel)
+    statistiquePresenter.appendChild(this.btPlay)
 
     // --------------------Métodos-------------------------------
 
@@ -497,27 +497,27 @@ function Stats() {
     this.updatePoints = () => {
         playerPoints += 50
         this.points.removeChild(this.points.firstChild);
-        this.points.appendChild(document.createTextNode(`Pontuação: ${playerPoints}`))
+        this.points.appendChild(document.createTextNode(`Ponctuation: ${playerPoints}`))
     }
 
     this.addPoints = () => {
         playerPoints += 1000
         this.points.removeChild(this.points.firstChild);
-        this.points.appendChild(document.createTextNode(`Pontuação: ${playerPoints}`))
+        this.points.appendChild(document.createTextNode(`Ponctuation: ${playerPoints}`))
     }
 
     this.gameOver = () => {
         
         this.imgGameOver = newElement("img", "imgGameOver")
         this.imgGameOver.src = 'img/gameoversk8.png'
-        statsArea.appendChild(this.imgGameOver)
+        statistiquePresenter.appendChild(this.imgGameOver)
 
         this.btRestart = newElement("button", "btRestart")
-        this.btRestart.appendChild(document.createTextNode("Jogar Novamente"))
+        this.btRestart.appendChild(document.createTextNode("Réessayer"))
         this.btRestart.onclick = () => {
             window.location.reload(true)
         }
-        statsArea.appendChild(this.btRestart)
+        statistiquePresenter.appendChild(this.btRestart)
         playing = false
     }
 
@@ -527,25 +527,25 @@ function Stats() {
 
 function RiverRaid() {
 
-    const cenary = new Cenary()
-    const ship = new Ship()
+    const decor = new Decor()
+    const personnage = new Personnage()
     
 
-    gameArea.appendChild(ship.element)
+    regionJeu.appendChild(personnage.element)
 
-    const collid = new Collid()
+    const collision = new Collision()
 
     this.play = () => {
 
         const timer = setInterval(() => {
             if (playing) {
-                ship.animate()
-                cenary.animate()
-                collid.verifyCollid()
-                collid.verifyGetElementFuel()
-                collid.verifyGetElementBonus()
-                stats.spendLevelFuel()
-                stats.verifyLevelFuel()
+                personnage.mouvement()
+                decor.mouvement()
+                collision.chequesCollision()
+                collision.verifyGetElementFuel()
+                collision.verifyGetElementBonus()
+                statistique.spendLevelFuel()
+                statistique.verifyLevelFuel()
             }
         }, 20)
     }
