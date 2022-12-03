@@ -48,7 +48,7 @@ body {
 
 .personnage {
     position: absolute;
-    width: 3%;
+    width: 4%;
     top: calc(75% - 30px);
 }
 
@@ -57,11 +57,11 @@ body {
 }
 
 .imgDecerner {
-    width: 100%;
+    width: 60%;
 }
 
 .imgFuel {
-    width: 100%;
+    width: 60%;
 }
 
 .title {

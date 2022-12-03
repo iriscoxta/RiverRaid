@@ -8,7 +8,7 @@ function newElement(tagName, className, idName) {
 const regionJeu = document.querySelector('[RiverRaid]')  /* marcar area do jogo */
 const statistiquePresenter = document.querySelector('[wm-Statistique]') /* marcar area das estatisticas */
 const statistique = new Statistique()
-let playing = false
+let jouer = false   
 
 function Barries() {
 
@@ -58,7 +58,7 @@ function Barries() {
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
     ];
 
-    this.midle = [
+    this.centre = [
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
@@ -81,7 +81,7 @@ function Barries() {
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
     ];
 
-    this.toright = [
+    this.droite = [
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
@@ -104,7 +104,7 @@ function Barries() {
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
     ];
 
-    this.toleft = [
+    this.lagauche = [
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
@@ -129,23 +129,23 @@ function Barries() {
 
 }
 
-function DrawBarries(barrie) { // recebe a matriz da barreira específica (cenário)
+function faireBarriere(barrie) { // recebe a matriz da barreira específica (cenário)
 
-    this.gameContext = newElement("div", "barrieStyle")
-    this.gameContext.style.position = `absolute`
-    this.gameContext.style.display = `grid`
-    this.gameContext.style.gridTemplateColumns = `repeat(20, 1fr)`;
-    this.gameContext.style.gridTemplateRows = `repeat(20, 1fr)`;
-    this.gameContext.style.width = "100%";
-    this.gameContext.style.height = "100%";
-    this.gameContext.style.top = "-685px";
+    this.construitBar = newElement("div", "barrieStyle")
+    this.construitBar.style.position = `absolute`
+    this.construitBar.style.display = `grid`
+    this.construitBar.style.gridTemplateColumns = `repeat(20, 1fr)`;
+    this.construitBar.style.gridTemplateRows = `repeat(20, 1fr)`;
+    this.construitBar.style.width = "100%";
+    this.construitBar.style.height = "100%";
+    this.construitBar.style.top = "-570px";
 
     this.barrie = barrie
 
     // console.log(this.barrie)
     
 
-    this.addElementBonus = () => {
+    this.ajElementDec = () => {      /* adiciona o elemento bonus*/
 
         let positions = SortPosition(this.barrie)
 
@@ -155,7 +155,7 @@ function DrawBarries(barrie) { // recebe a matriz da barreira específica (cená
         this.barrie[positions[0]][positions[1]] = 2
     }
 
-    this.addElementFuel = () => {
+    this.ajElementCarb = () => {        /* adiciona o elemento combustivel*/
 
         let positions = SortPosition(this.barrie)
 
@@ -165,8 +165,8 @@ function DrawBarries(barrie) { // recebe a matriz da barreira específica (cená
         this.barrie[positions[0]][positions[1]] = 3
     }
 
-    this.addElementBonus()
-    this.addElementFuel()
+    this.ajElementDec()
+    this.ajElementCarb()
 
 
     for (let row in this.barrie) {
@@ -178,28 +178,31 @@ function DrawBarries(barrie) { // recebe a matriz da barreira específica (cená
                 let elementTile = newElement("div", "barrie")
                 // elementTile.style.backgroundColor = "green"
                 elementTile.style.backgroundImage = "url(img/parededetijolovermelho.png)"
-                this.gameContext.appendChild(elementTile)
+                this.construitBar.appendChild(elementTile)
 
             } else if (tile === 0) {
                 let elementTile = newElement("div", "air")
                 // elementTile.style.backgroundColor = "deepskyblue"
-                this.gameContext.appendChild(elementTile)
+                elementTile.style.backgroundImage = "url(img/cement1.png)"
+                this.construitBar.appendChild(elementTile)
 
             } else if (tile === 2) {
-                let elementTile = newElement("div", "bonus")
+                let elementTile = newElement("div", "decerner")
                 let imgDecerner = newElement('img', 'imgDecerner')
                 imgDecerner.src = 'img/bonus.png'
                 // elementTile.style.backgroundColor = "deepskyblue"
+                elementTile.style.backgroundImage = "url(img/cement1.png)"
                 elementTile.appendChild(imgDecerner)
-                this.gameContext.appendChild(elementTile)
+                this.construitBar.appendChild(elementTile)
 
             } else if (tile === 3) {
                 let elementTile = newElement("div", "fuel")
                 let imgFuel = newElement('img', 'imgFuel')
                 imgFuel.src = 'img/combustivel.png'
                 // elementTile.style.backgroundColor = "deepskyblue"
+                elementTile.style.backgroundImage = "url(img/cement1.png)"
                 elementTile.appendChild(imgFuel)
-                this.gameContext.appendChild(elementTile)
+                this.construitBar.appendChild(elementTile)
 
             }
 
@@ -208,10 +211,10 @@ function DrawBarries(barrie) { // recebe a matriz da barreira específica (cená
     }
 
 
-    regionJeu.insertAdjacentElement('afterbegin', this.gameContext);
+    regionJeu.insertAdjacentElement('afterbegin', this.construitBar);
 
-    this.getY = () => parseInt(this.gameContext.style.top.split('px')[0]);
-    this.setY = (y) => this.gameContext.style.top = `${y}px`;
+    this.getY = () => parseInt(this.construitBar.style.top.split('px')[0]);
+    this.setY = (y) => this.construitBar.style.top = `${y}px`;
 
     this.mouvement = () => {
 
@@ -223,12 +226,12 @@ function DrawBarries(barrie) { // recebe a matriz da barreira específica (cená
         this.setY(newYposition)
 
         // if(this.getY() > 1000)
-        //     this.gameContext
+        //     this.construitBar
 
     }
 
     this.delete = () => {
-        this.gameContext.parentNode.removeChild(this.gameContext)
+        this.construitBar.parentNode.removeChild(this.construitBar)
     }
 
 }
@@ -241,14 +244,14 @@ function SortPosition(barrie) {
     return [rowPosition, columnPosition]
 }
 
-function SortBarries(barries) { // recebe o objeto que contem todas as barreiras (cenários)
+function tombBarriere(barries) { // recebe o objeto que contem todas as barreiras (cenários)
 
     let arrBarries = [
         barries.bifurcation,
         barries.zigzag,
-        barries.midle,
-        barries.toright,
-        barries.toleft
+        barries.centre,
+        barries.droite,
+        barries.lagauche
     ]
     let i = Math.floor(Math.random() * arrBarries.length)
     return arrBarries[i] // retorna uma barreira aleatória
@@ -258,7 +261,7 @@ function Decor() {
     
     this.nouveauDecor = () => {
         const barries = new Barries()
-        return new DrawBarries(SortBarries(barries))
+        return new faireBarriere(tombBarriere(barries))
     }
 
     let nouveauDecor = this.nouveauDecor()
@@ -270,7 +273,7 @@ function Decor() {
 
         if (typeof agedeDecor === 'object' && agedeDecor !== null) {
             agedeDecor.mouvement()
-            if (agedeDecor.getY() > 680){
+            if (agedeDecor.getY() > 565){
                 statistique.updatePoints()
                 agedeDecor.delete()
             } 
@@ -341,12 +344,12 @@ function Collision() {
 
     this.cestCollision = () => {
 
-        let shipElement = document.getElementById("moi")
+        let personnageElement = document.getElementById("moi")
         let barriesLenght = document.getElementsByClassName("barrie").length
 
         for (let i = 0; i < barriesLenght; i++) {
             let barrieElement = document.getElementsByClassName("barrie")[i]
-            const a = shipElement.getBoundingClientRect()
+            const a = personnageElement.getBoundingClientRect()
             const b = barrieElement.getBoundingClientRect()
             const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left
             const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top
@@ -360,18 +363,18 @@ function Collision() {
 
     this.prendsLeCarburant = () => {
 
-        let shipElement = document.getElementById("moi")
-        let fuelsLenght = document.getElementsByClassName("fuel").length
+        let personnageElement = document.getElementById("moi")
+        let lecarburantLongueur = document.getElementsByClassName("fuel").length
 
-        for (let i = 0; i < fuelsLenght; i++) {
-            let fuelElement = document.getElementsByClassName("fuel")[i]
-            const a = shipElement.getBoundingClientRect()
-            const b = fuelElement.getBoundingClientRect()
+        for (let i = 0; i < lecarburantLongueur; i++) {
+            let lecarburantElement = document.getElementsByClassName("fuel")[i]
+            const a = personnageElement.getBoundingClientRect()
+            const b = lecarburantElement.getBoundingClientRect()
             const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left /* calculo da colisão */
             const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top     /* calculo da colisão */
 
             if (horizontal && vertical){
-                fuelElement.removeChild(fuelElement.firstChild)
+                lecarburantElement.removeChild(lecarburantElement.firstChild)
                 return true
             }
         }
@@ -381,18 +384,18 @@ function Collision() {
 
     this.prendsDecerner = () => {
 
-        let shipElement = document.getElementById("moi")
-        let bonusLenght = document.getElementsByClassName("bonus").length
+        let personnageElement = document.getElementById("moi")
+        let decernerLongueur = document.getElementsByClassName("decerner").length
 
-        for (let i = 0; i < bonusLenght; i++) {
-            let bonusElement = document.getElementsByClassName("bonus")[i]
-            const a = shipElement.getBoundingClientRect()
-            const b = bonusElement.getBoundingClientRect()
+        for (let i = 0; i < decernerLongueur; i++) {
+            let decernerElement = document.getElementsByClassName("decerner")[i]
+            const a = personnageElement.getBoundingClientRect()
+            const b = decernerElement.getBoundingClientRect()
             const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left
             const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top
 
             if (horizontal && vertical){
-                bonusElement.removeChild(bonusElement.firstChild)
+                decernerElement.removeChild(decernerElement.firstChild)
                 return true
             }
         }
@@ -444,7 +447,7 @@ function Statistique() {
     this.btPlay = newElement("button", "btPlay")
     this.btPlay.appendChild(document.createTextNode("JOUER"))
     this.btPlay.onclick = () => {
-        playing = true
+        jouer = true
         document.querySelector('.btPlay').style.display = 'none'
     }
 
@@ -518,7 +521,7 @@ function Statistique() {
             window.location.reload(true)
         }
         statistiquePresenter.appendChild(this.btRestart)
-        playing = false
+        jouer = false
     }
 
 
@@ -527,8 +530,8 @@ function Statistique() {
 
 function RiverRaid() {
 
-    const decor = new Decor()
     const personnage = new Personnage()
+    const decor = new Decor()
     
 
     regionJeu.appendChild(personnage.element)
@@ -538,7 +541,7 @@ function RiverRaid() {
     this.play = () => {
 
         const timer = setInterval(() => {
-            if (playing) {
+            if (jouer) {
                 personnage.mouvement()
                 decor.mouvement()
                 collision.chequesCollision()
