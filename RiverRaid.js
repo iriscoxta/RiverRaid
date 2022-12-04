@@ -191,11 +191,11 @@ function faireBarriere(barrie) { // recebe a matriz da barreira específica (cen
                 this.construitBar.appendChild(elementTile)
 
             } else if (tile === 3) {
-                let elementTile = newElement("div", "fuel")
-                let imgFuel = newElement('img', 'imgFuel')
-                imgFuel.src = 'img/combustivel.png'
+                let elementTile = newElement("div", "carb")
+                let imgCarb = newElement('img', 'imgCarb')
+                imgCarb.src = 'img/combustivel.png'
                 elementTile.style.backgroundImage = "url(img/cement1.png)"
-                elementTile.appendChild(imgFuel)
+                elementTile.appendChild(imgCarb)
                 this.construitBar.appendChild(elementTile)
 
             }
@@ -354,10 +354,10 @@ function Collision() {
     this.prendsLeCarburant = () => {
 
         let personnageElement = document.getElementById("moi")
-        let lecarburantLongueur = document.getElementsByClassName("fuel").length
+        let lecarburantLongueur = document.getElementsByClassName("carb").length
 
         for (let i = 0; i < lecarburantLongueur; i++) {
-            let lecarburantElement = document.getElementsByClassName("fuel")[i]
+            let lecarburantElement = document.getElementsByClassName("carb")[i]
             const a = personnageElement.getBoundingClientRect()
             const b = lecarburantElement.getBoundingClientRect()
             const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left /* calculo da colisão */
@@ -425,11 +425,11 @@ function Collision() {
 function Statistique() {
     
     let playerPoints = 0
-    let countFuel = 0
+    let countCarb = 0
     
     // -------------- Título ---------------
-    this.title = newElement("div", "title")
-    this.title.append("River Raid")
+    this.titre = newElement("div", "titre")
+    this.titre.append("River Raid")
 
     // -------------- Pontuação ---------------
     this.points = newElement("div", "points")
@@ -447,15 +447,15 @@ function Statistique() {
     this.titreCarb = newElement("div", "titreCarb")
 
     this.titreCarb.appendChild(document.createTextNode(`Le Carburant`))
-    this.fuelImg = newElement("img", "fuelImg") 
-    this.fuelImg.src = 'img/combustivel.png'
-    this.fuelCount = newElement("div", "fuelCount")
-    this.fuelCount.appendChild(document.createTextNode(`${countFuel}`))
-    this.titreCarb.appendChild(this.fuelImg)
-    this.titreCarb.appendChild(this.fuelCount)
+    this.carbImg = newElement("img", "carbImg") 
+    this.carbImg.src = 'img/combustivel.png'
+    this.carbCount = newElement("div", "carbCount")
+    this.carbCount.appendChild(document.createTextNode(`${countCarb}`))
+    this.titreCarb.appendChild(this.carbImg)
+    this.titreCarb.appendChild(this.carbCount)
 
 
-    this.progressBarFuel = newElement("div", "progressBarFuel")
+    this.progressBarCarb = newElement("div", "progressBarCarb")
     
 
     // ---------------------Config da Página---------------
@@ -463,32 +463,32 @@ function Statistique() {
     statistiquePresenter.style.flexDirection = 'column'
     statistiquePresenter.style.justifyContent = 'flex-start'
     statistiquePresenter.style.alignItems = 'center'
-    statistiquePresenter.appendChild(this.title)
+    statistiquePresenter.appendChild(this.titre)
     statistiquePresenter.appendChild(this.points)
     statistiquePresenter.appendChild(this.titreCarb)
-    statistiquePresenter.appendChild(this.progressBarFuel)
+    statistiquePresenter.appendChild(this.progressBarCarb)
     statistiquePresenter.appendChild(this.btJouer)
 
     // --------------------Métodos-------------------------------
 
-    this.getLevelFuel = () => {
-        return parseFloat(getComputedStyle(document.querySelector('.progressBarFuel')).getPropertyValue('--levelFuel'))
+    this.getLevelCarb = () => {
+        return parseFloat(getComputedStyle(document.querySelector('.progressBarCarb')).getPropertyValue('--levelCarb'))
     }
 
-    this.setLevelFuel = (fuel) => {
-        this.progressBarFuel.style.setProperty('--levelFuel', `${fuel}`)
+    this.setLevelCarb = (carb) => {
+        this.progressBarCarb.style.setProperty('--levelCarb', `${carb}`)
     }
 
     this.depenseNiveauCarb = () => {
-        this.setLevelFuel(this.getLevelFuel() - 0.2)
+        this.setLevelCarb(this.getLevelCarb() - 0.2)
     }
 
     this.ajNiveauCarb = () => {
-        this.setLevelFuel(this.getLevelFuel() + 20)
+        this.setLevelCarb(this.getLevelCarb() + 20)
     }
 
     this.chequesNiveauCarb = () => {        //verifica nivel de combustivel
-        let level = this.getLevelFuel()
+        let level = this.getLevelCarb()
         if(level < 0){
             this.gameOver()
         }
@@ -511,9 +511,9 @@ function Statistique() {
     }
 
     this.ajContCarb = () => { //contador de combustivel
-        countFuel += 1
-        this.fuelCount.removeChild(this.fuelCount.firstChild);
-        this.fuelCount.appendChild(document.createTextNode(`${countFuel}`))
+        countCarb += 1
+        this.carbCount.removeChild(this.carbCount.firstChild);
+        this.carbCount.appendChild(document.createTextNode(`${countCarb}`))
      }
 
     this.gameOver = () => {
