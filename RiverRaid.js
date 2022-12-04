@@ -327,7 +327,7 @@ function Personnage() {
 
     this.mouvement = () => {
 
-        const motion = 10 //acrescimo de pixels por movimento
+        const motion = 8 //acrescimo de pixels por movimento
         let nouveauPositionX = this.getX()
 
         if (this.allerDroite) {
@@ -416,6 +416,7 @@ function Collision() {
 
         if (this.prendsLeCarburant()){
             statistique.addLevelFuel()
+            statistique.addCountFuel()
         }
             
 
@@ -434,6 +435,7 @@ function Collision() {
 function Statistique() {
     
     let playerPoints = 0
+    let countFuel = 0
     
     // -------------- Título ---------------
     this.title = newElement("div", "title")
@@ -453,7 +455,16 @@ function Statistique() {
 
     // -------------- Barra de Combustível ----------------
     this.titleFuel = newElement("div", "titleFuel")
+
     this.titleFuel.appendChild(document.createTextNode(`Le Carburant`))
+    this.fuelImg = newElement("img", "fuelImg") 
+    this.fuelImg.src = 'img/combustivel.png'
+    this.fuelCount = newElement("div", "fuelCount")
+    this.fuelCount.appendChild(document.createTextNode(`${countFuel}`))
+    this.titleFuel.appendChild(this.fuelImg)
+    this.titleFuel.appendChild(this.fuelCount)
+
+
     this.progressBarFuel = newElement("div", "progressBarFuel")
     
 
@@ -508,6 +519,12 @@ function Statistique() {
         this.points.removeChild(this.points.firstChild);
         this.points.appendChild(document.createTextNode(`Ponctuation: ${playerPoints}`))
     }
+
+    this.addCountFuel = () => {
+        countFuel += 1
+        this.fuelCount.removeChild(this.fuelCount.firstChild);
+        this.fuelCount.appendChild(document.createTextNode(`${countFuel}`))
+     }
 
     this.gameOver = () => {
         
