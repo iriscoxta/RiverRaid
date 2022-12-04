@@ -215,7 +215,7 @@ function faireBarriere(barrie) { // recebe a matriz da barreira específica (cen
         const motion = 5 //acrescimo de pixels por movimento
         let newYposition = this.getY();
 
-        newYposition = this.getY() + motion;
+        newYposition = this.getY() + motion;    
 
         this.setY(newYposition)
     }
@@ -360,8 +360,8 @@ function Collision() {
             let lecarburantElement = document.getElementsByClassName("carb")[i]
             const a = personnageElement.getBoundingClientRect()
             const b = lecarburantElement.getBoundingClientRect()
-            const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left /* calculo da colisão */
-            const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top     /* calculo da colisão */
+            const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left 
+            const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top     
 
             if (horizontal && vertical){
                 lecarburantElement.removeChild(lecarburantElement.firstChild)           //remove a imagem
@@ -405,8 +405,8 @@ function Collision() {
     this.chequesPrendsElementCarb = () => {     //Verifica se pegou combustível
 
         if (this.prendsLeCarburant()){
-            statistique.ajNiveauCarb()
-            statistique.ajContCarb()
+            statistique.ajNiveauCarb()          // adiciona mais um nível de combustível
+            statistique.ajContCarb()            // adiciona no contatodor de combustível
         }
             
 
@@ -415,7 +415,7 @@ function Collision() {
     this.chequesPrendsElementDec = () => {  //Verifica se pegou premios
 
         if (this.prendsDecerner()){
-            statistique.addPoints()
+            statistique.addPoints()         // adicionar mais pontos
         }
 
     }
@@ -427,15 +427,15 @@ function Statistique() {
     let playerPoints = 0
     let countCarb = 0
     
-    // -------------- Título ---------------
+    // Título 
     this.titre = newElement("div", "titre")
     this.titre.append("River Raid")
 
-    // -------------- Pontuação ---------------
+    //  Pontuação 
     this.points = newElement("div", "points")
     this.points.appendChild(document.createTextNode(`Ponctuation: ${playerPoints}`))
 
-    // -------------- Botão ---------------
+    // Botão Jogar
     this.btJouer = newElement("button", "btJouer")
     this.btJouer.appendChild(document.createTextNode("JOUER"))
     this.btJouer.onclick = () => {
@@ -443,7 +443,7 @@ function Statistique() {
         document.querySelector('.btJouer').style.display = 'none'
     }
 
-    // -------------- Barra de Combustível ----------------
+    //  Barra de Combustível 
     this.titreCarb = newElement("div", "titreCarb")
 
     this.titreCarb.appendChild(document.createTextNode(`Le Carburant`))
@@ -455,10 +455,10 @@ function Statistique() {
     this.titreCarb.appendChild(this.carbCount)
 
 
-    this.progressBarCarb = newElement("div", "progressBarCarb")
+    this.carbBarProg = newElement("div", "carbBarProg")
     
 
-    // ---------------------Config da Página---------------
+    // Configuração da Página
     statistiquePresenter.style.display = 'flex'
     statistiquePresenter.style.flexDirection = 'column'
     statistiquePresenter.style.justifyContent = 'flex-start'
@@ -466,24 +466,24 @@ function Statistique() {
     statistiquePresenter.appendChild(this.titre)
     statistiquePresenter.appendChild(this.points)
     statistiquePresenter.appendChild(this.titreCarb)
-    statistiquePresenter.appendChild(this.progressBarCarb)
+    statistiquePresenter.appendChild(this.carbBarProg)
     statistiquePresenter.appendChild(this.btJouer)
 
-    // --------------------Métodos-------------------------------
+    // Métodos
 
-    this.getLevelCarb = () => {
-        return parseFloat(getComputedStyle(document.querySelector('.progressBarCarb')).getPropertyValue('--levelCarb'))
+    this.getLevelCarb = () => {        //pega o valor
+        return parseFloat(getComputedStyle(document.querySelector('.carbBarProg')).getPropertyValue('--levelCarb'))
     }
 
-    this.setLevelCarb = (carb) => {
-        this.progressBarCarb.style.setProperty('--levelCarb', `${carb}`)
+    this.setLevelCarb = (carb) => {     //atualiza o valor do nivel de combustivel
+        this.carbBarProg.style.setProperty('--levelCarb', `${carb}`)
     }
 
-    this.depenseNiveauCarb = () => {
-        this.setLevelCarb(this.getLevelCarb() - 0.2)
+    this.depenseNiveauCarb = () => {    //gastar o nivel de combustivel
+        this.setLevelCarb(this.getLevelCarb() - 0.15)
     }
 
-    this.ajNiveauCarb = () => {
+    this.ajNiveauCarb = () => {         // adicionar nivel de combustivel
         this.setLevelCarb(this.getLevelCarb() + 20)
     }
 
@@ -504,7 +504,7 @@ function Statistique() {
         this.points.appendChild(document.createTextNode(`Ponctuation: ${playerPoints}`))
     }
 
-    this.addPoints = () => {
+    this.addPoints = () => {       //adiciona pontos quando pega medalhas
         playerPoints += 1000
         this.points.removeChild(this.points.firstChild);
         this.points.appendChild(document.createTextNode(`Ponctuation: ${playerPoints}`))
@@ -516,13 +516,13 @@ function Statistique() {
         this.carbCount.appendChild(document.createTextNode(`${countCarb}`))
      }
 
-    this.gameOver = () => {
+    this.gameOver = () => {     //fim de jogo!
         
         this.imgGameOver = newElement("img", "imgGameOver")
         this.imgGameOver.src = 'img/gameoversk8.png'
         statistiquePresenter.appendChild(this.imgGameOver)
 
-        this.btReesayer = newElement("button", "btReesayer")
+        this.btReesayer = newElement("button", "btReesayer")    
         this.btReesayer.appendChild(document.createTextNode("Réessayer"))
         this.btReesayer.onclick = () => {
             window.location.reload(true)

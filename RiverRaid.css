@@ -31,7 +31,6 @@ body {
     width: 70%;
     margin: 5px;
     background-color: #10414f;
-    /* background-image: url(img/monster1.png); */
     overflow: hidden;
 }
 
@@ -51,7 +50,6 @@ body {
     position: absolute;
     width: 4%;
     top: calc(75% - 30px);
-    /* border: 3px solid red; */
 }
 
 .barrie{
@@ -80,22 +78,6 @@ body {
     padding: 5%;
 }
 
-
-.progressBarCarb {
-    --levelCarb: 100;
-    height: 50px;
-    width: 50%;
-    padding: 2px;
-    background-color: #0D262D;
-    display: flex;
-}
-
-.progressBarCarb::before {
-    content: "";
-    width: calc((var(--levelCarb) * 1%));
-    background-color: hsl(calc(var(--levelCarb) * 1.2), 80%, 50%);
-}
-
 .titreCarb{
     display: flex;
     flex-direction: row;
@@ -113,6 +95,20 @@ body {
     margin-right: 2%;
     margin-bottom: 2%;
 }
+.carbBarProg {
+    --levelCarb: 100;
+    height: 50px;
+    width: 50%;
+    padding: 2px;
+    background-color: #0D262D;
+    display: flex;
+}
+
+.carbBarProg::before {
+    content: "";
+    width: calc((var(--levelCarb) * 1%));
+    background-color: hsl(calc(var(--levelCarb) * 1.2), 80%, 50%);
+}
 
 .btJouer {
 
@@ -128,13 +124,10 @@ body {
     margin-bottom: 5%;
         margin-top: 5%;
     border-radius: 60px;
-    /* border: 5px solid red; */
 }
 
 .imgGameOver{
-    /* margin-top: 15%; */
     margin-bottom: 20%;
-    /* border: 5px solid red; */
     width: 60%;
 
 }
