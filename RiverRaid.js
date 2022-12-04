@@ -141,13 +141,11 @@ function faireBarriere(barrie) { // recebe a matriz da barreira específica (cen
     this.construitBar.style.top = "-570px";
 
     this.barrie = barrie
-
-    // console.log(this.barrie)
     
 
     this.ajElementDec = () => {      /* adiciona o elemento bonus*/
 
-        let positions = SortPosition(this.barrie)
+        let positions = SortPosition(this.barrie)               /* adiciona o elemento bonus na matriz com base no sorteio*/
 
         while (this.barrie[positions[0]][positions[1]] != 0) {
             positions = SortPosition(this.barrie)
@@ -157,7 +155,7 @@ function faireBarriere(barrie) { // recebe a matriz da barreira específica (cen
 
     this.ajElementCarb = () => {        /* adiciona o elemento combustivel*/
 
-        let positions = SortPosition(this.barrie)
+        let positions = SortPosition(this.barrie)               /* adiciona o elemento bonus na matriz com base no sorteio*/
 
         while (this.barrie[positions[0]][positions[1]] != 0) {
             positions = SortPosition(this.barrie)
@@ -169,20 +167,18 @@ function faireBarriere(barrie) { // recebe a matriz da barreira específica (cen
     this.ajElementCarb()
 
 
-    for (let row in this.barrie) {
+    for (let row in this.barrie) {      /* vai criar os elementos e de fato colocar no HTML */
         for (let column in this.barrie[row]) {
 
             let tile = this.barrie[row][column] //bloquinho
 
             if (tile === 1) {
                 let elementTile = newElement("div", "barrie")
-                // elementTile.style.backgroundColor = "green"
                 elementTile.style.backgroundImage = "url(img/parededetijolovermelho.png)"
                 this.construitBar.appendChild(elementTile)
 
             } else if (tile === 0) {
                 let elementTile = newElement("div", "air")
-                // elementTile.style.backgroundColor = "deepskyblue"
                 elementTile.style.backgroundImage = "url(img/cement1.png)"
                 this.construitBar.appendChild(elementTile)
 
@@ -190,7 +186,6 @@ function faireBarriere(barrie) { // recebe a matriz da barreira específica (cen
                 let elementTile = newElement("div", "decerner")
                 let imgDecerner = newElement('img', 'imgDecerner')
                 imgDecerner.src = 'img/bonus.png'
-                // elementTile.style.backgroundColor = "deepskyblue"
                 elementTile.style.backgroundImage = "url(img/cement1.png)"
                 elementTile.appendChild(imgDecerner)
                 this.construitBar.appendChild(elementTile)
@@ -199,7 +194,6 @@ function faireBarriere(barrie) { // recebe a matriz da barreira específica (cen
                 let elementTile = newElement("div", "fuel")
                 let imgFuel = newElement('img', 'imgFuel')
                 imgFuel.src = 'img/combustivel.png'
-                // elementTile.style.backgroundColor = "deepskyblue"
                 elementTile.style.backgroundImage = "url(img/cement1.png)"
                 elementTile.appendChild(imgFuel)
                 this.construitBar.appendChild(elementTile)
@@ -210,8 +204,8 @@ function faireBarriere(barrie) { // recebe a matriz da barreira específica (cen
         }
     }
 
-
-    regionJeu.insertAdjacentElement('afterbegin', this.construitBar);
+    // Constroi a barreira e coloca na area de jogo, posição indicada (-570 px) pra começar a animar 
+    regionJeu.insertAdjacentElement('afterbegin', this.construitBar);  /* adicionar de forma adjacente (nao deixa a barreira sobreposta a nave)*/
 
     this.getY = () => parseInt(this.construitBar.style.top.split('px')[0]);
     this.setY = (y) => this.construitBar.style.top = `${y}px`;
@@ -224,10 +218,6 @@ function faireBarriere(barrie) { // recebe a matriz da barreira específica (cen
         newYposition = this.getY() + motion;
 
         this.setY(newYposition)
-
-        // if(this.getY() > 1000)
-        //     this.construitBar
-
     }
 
     this.delete = () => {
@@ -236,7 +226,7 @@ function faireBarriere(barrie) { // recebe a matriz da barreira específica (cen
 
 }
 
-function SortPosition(barrie) {
+function SortPosition(barrie) { //Sortear os elementos
 
     let rowPosition = Math.floor(Math.random() * barrie.length)
     let columnPosition = Math.floor(Math.random() * barrie[rowPosition].length)
@@ -244,7 +234,7 @@ function SortPosition(barrie) {
     return [rowPosition, columnPosition]
 }
 
-function tombBarriere(barries) { // recebe o objeto que contem todas as barreiras (cenários)
+function SortBarriere(barries) { // recebe o objeto que contem todas as barreiras (cenários)
 
     let arrBarries = [
         barries.bifurcation,
@@ -257,11 +247,11 @@ function tombBarriere(barries) { // recebe o objeto que contem todas as barreira
     return arrBarries[i] // retorna uma barreira aleatória
 }
 
-function Decor() {
+function Decor() {      //onde acontece a animação de todas as barreiras
     
     this.nouveauDecor = () => {
         const barries = new Barries()
-        return new faireBarriere(tombBarriere(barries))
+        return new faireBarriere(SortBarriere(barries))
     }
 
     let nouveauDecor = this.nouveauDecor()
@@ -342,7 +332,7 @@ function Personnage() {
 
 function Collision() {
 
-    this.cestCollision = () => {
+    this.cestCollision = () => {    //está colidindo
 
         let personnageElement = document.getElementById("moi")
         let barriesLenght = document.getElementsByClassName("barrie").length
@@ -374,7 +364,7 @@ function Collision() {
             const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top     /* calculo da colisão */
 
             if (horizontal && vertical){
-                lecarburantElement.removeChild(lecarburantElement.firstChild)
+                lecarburantElement.removeChild(lecarburantElement.firstChild)           //remove a imagem
                 return true
             }
         }
@@ -395,7 +385,7 @@ function Collision() {
             const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top
 
             if (horizontal && vertical){
-                decernerElement.removeChild(decernerElement.firstChild)
+                decernerElement.removeChild(decernerElement.firstChild)               //remove a imagem  
                 return true
             }
         }
@@ -403,7 +393,7 @@ function Collision() {
 
     }
 
-    this.chequesCollision = () => {
+    this.chequesCollision = () => {         //Verifica se colidiu
 
         if (this.cestCollision()){
             statistique.gameOver()
@@ -412,17 +402,17 @@ function Collision() {
 
     }
 
-    this.verifyGetElementFuel = () => {
+    this.chequesPrendsElementCarb = () => {     //Verifica se pegou combustível
 
         if (this.prendsLeCarburant()){
-            statistique.addLevelFuel()
-            statistique.addCountFuel()
+            statistique.ajNiveauCarb()
+            statistique.ajContCarb()
         }
             
 
     }
 
-    this.verifyGetElementBonus = () => {
+    this.chequesPrendsElementDec = () => {  //Verifica se pegou premios
 
         if (this.prendsDecerner()){
             statistique.addPoints()
@@ -446,23 +436,23 @@ function Statistique() {
     this.points.appendChild(document.createTextNode(`Ponctuation: ${playerPoints}`))
 
     // -------------- Botão ---------------
-    this.btPlay = newElement("button", "btPlay")
-    this.btPlay.appendChild(document.createTextNode("JOUER"))
-    this.btPlay.onclick = () => {
+    this.btJouer = newElement("button", "btJouer")
+    this.btJouer.appendChild(document.createTextNode("JOUER"))
+    this.btJouer.onclick = () => {
         jouer = true
-        document.querySelector('.btPlay').style.display = 'none'
+        document.querySelector('.btJouer').style.display = 'none'
     }
 
     // -------------- Barra de Combustível ----------------
-    this.titleFuel = newElement("div", "titleFuel")
+    this.titreCarb = newElement("div", "titreCarb")
 
-    this.titleFuel.appendChild(document.createTextNode(`Le Carburant`))
+    this.titreCarb.appendChild(document.createTextNode(`Le Carburant`))
     this.fuelImg = newElement("img", "fuelImg") 
     this.fuelImg.src = 'img/combustivel.png'
     this.fuelCount = newElement("div", "fuelCount")
     this.fuelCount.appendChild(document.createTextNode(`${countFuel}`))
-    this.titleFuel.appendChild(this.fuelImg)
-    this.titleFuel.appendChild(this.fuelCount)
+    this.titreCarb.appendChild(this.fuelImg)
+    this.titreCarb.appendChild(this.fuelCount)
 
 
     this.progressBarFuel = newElement("div", "progressBarFuel")
@@ -475,9 +465,9 @@ function Statistique() {
     statistiquePresenter.style.alignItems = 'center'
     statistiquePresenter.appendChild(this.title)
     statistiquePresenter.appendChild(this.points)
-    statistiquePresenter.appendChild(this.titleFuel)
+    statistiquePresenter.appendChild(this.titreCarb)
     statistiquePresenter.appendChild(this.progressBarFuel)
-    statistiquePresenter.appendChild(this.btPlay)
+    statistiquePresenter.appendChild(this.btJouer)
 
     // --------------------Métodos-------------------------------
 
@@ -489,15 +479,15 @@ function Statistique() {
         this.progressBarFuel.style.setProperty('--levelFuel', `${fuel}`)
     }
 
-    this.spendLevelFuel = () => {
+    this.depenseNiveauCarb = () => {
         this.setLevelFuel(this.getLevelFuel() - 0.2)
     }
 
-    this.addLevelFuel = () => {
+    this.ajNiveauCarb = () => {
         this.setLevelFuel(this.getLevelFuel() + 20)
     }
 
-    this.verifyLevelFuel = () => {
+    this.chequesNiveauCarb = () => {        //verifica nivel de combustivel
         let level = this.getLevelFuel()
         if(level < 0){
             this.gameOver()
@@ -520,7 +510,7 @@ function Statistique() {
         this.points.appendChild(document.createTextNode(`Ponctuation: ${playerPoints}`))
     }
 
-    this.addCountFuel = () => {
+    this.ajContCarb = () => { //contador de combustivel
         countFuel += 1
         this.fuelCount.removeChild(this.fuelCount.firstChild);
         this.fuelCount.appendChild(document.createTextNode(`${countFuel}`))
@@ -532,12 +522,12 @@ function Statistique() {
         this.imgGameOver.src = 'img/gameoversk8.png'
         statistiquePresenter.appendChild(this.imgGameOver)
 
-        this.btRestart = newElement("button", "btRestart")
-        this.btRestart.appendChild(document.createTextNode("Réessayer"))
-        this.btRestart.onclick = () => {
+        this.btReesayer = newElement("button", "btReesayer")
+        this.btReesayer.appendChild(document.createTextNode("Réessayer"))
+        this.btReesayer.onclick = () => {
             window.location.reload(true)
         }
-        statistiquePresenter.appendChild(this.btRestart)
+        statistiquePresenter.appendChild(this.btReesayer)
         jouer = false
     }
 
@@ -562,10 +552,10 @@ function RiverRaid() {
                 personnage.mouvement()
                 decor.mouvement()
                 collision.chequesCollision()
-                collision.verifyGetElementFuel()
-                collision.verifyGetElementBonus()
-                statistique.spendLevelFuel()
-                statistique.verifyLevelFuel()
+                collision.chequesPrendsElementCarb()
+                collision.chequesPrendsElementDec()
+                statistique.depenseNiveauCarb()
+                statistique.chequesNiveauCarb()
             }
         }, 20)
     }
